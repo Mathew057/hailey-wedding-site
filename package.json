@@ -1,0 +1,38 @@
+{
+  "name": "hailey-wedding-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "concurrently \"npm run client-test\" \"npm run server-test\"",
+    "start": "concurrently \"npm run client-run\" \"npm run server-run\"",
+    "postinstall": "npm run server-install & npm run client-install",
+    "build": "npm run client-build & npm run server-build",
+    "serve": "concurrently \"npm run client-serve\" \"npm run server-serve\"",
+    "docs": "jsdoc -c jsdoc.conf.json",
+    "docs-serve": "serve -l 5001 -d docs",
+    "client-install": "cd client && npm install",
+    "client-test": "cd client && npm run start",
+    "client-run": "cd client && npm run start",
+    "client-build": "cd client && npm run build",
+    "client-serve": "cd client && serve -s build",
+    "server-install": "cd server && npm install",
+    "server-run": "cd server && npm run dev",
+    "server-serve": "cd server && npm run start",
+    "server-test": "cd server && npm run test",
+    "server-build": "cd server && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mathew057/hailey-wedding-site.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mathew057/hailey-wedding-site/issues"
+  },
+  "homepage": "https://github.com/Mathew057/hailey-wedding-site#readme",
+  "dependencies": {
+    "concurrently": "^5.2.0"
+  }
+}
