@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import pusher from "../utils/pusher";
@@ -68,28 +67,6 @@ export default function ChatRoom(_props: any) {
       From: "+19034566041",
       ApiVersion: "2010-04-01",
     },
-    {
-      ToCountry: "US",
-      ToState: "AL",
-      SmsMessageSid: "SM64dea19b4d5f3fd8e2f029ecaf1e178f",
-      NumMedia: "0",
-      ToCity: "",
-      FromZip: "75422",
-      SmsSid: "SM64dea19b4d5f3fd8e2f029ecaf1e178f",
-      FromState: "TX",
-      SmsStatus: "received",
-      FromCity: "GREENVILLE",
-      Body:
-        "Knowledge nay estimable questions repulsive daughters boy. Solicitude gay way unaffected expression for. His mistress ladyship required off horrible disposed rejoiced. Unpleasing pianoforte unreserved as oh he unpleasant no inquietude insipidity. Advantages can discretion possession add",
-      FromCountry: "US",
-      To: "+12057828137",
-      ToZip: "",
-      NumSegments: "2",
-      MessageSid: "SM64dea19b4d5f3fd8e2f029ecaf1e178f",
-      AccountSid: "AC16b717a886289b105a491446ab306a41",
-      From: "+19034566041",
-      ApiVersion: "2010-04-01",
-    },
   ]);
 
   React.useEffect(() => {
@@ -99,16 +76,30 @@ export default function ChatRoom(_props: any) {
       setMessages((messages) => [...messages, new_message]);
     });
   }, []);
+
+  React.useEffect(() => {});
   return (
     <div className={classes.root}>
       <AutoPlaySwipeableViews
         index={index}
         onChangeIndex={(index) => setIndex(index)}
+        interval={5000}
         className={classes.slider}
       >
-        <div className={clsx(classes.slide, classes.slide1)}>slide n°1</div>
-        <div className={clsx(classes.slide, classes.slide2)}>slide n°2</div>
-        <div className={clsx(classes.slide, classes.slide3)}>slide n°3</div>
+        {Array(44)
+          .fill(0)
+          .map((_, index) => {
+            console.log(`${process.env.REACT_APP_API_URL}/images/${index}.jpg`);
+            return (
+              <div className={classes.slide} key={`${index}`}>
+                <img
+                  src={`${process.env.REACT_APP_API_URL}/images/${index}.jpg`}
+                  alt="test"
+                  style={{ maxWidth: "100%", maxHeight: "100%" }}
+                />
+              </div>
+            );
+          })}
       </AutoPlaySwipeableViews>
       <Grid
         container

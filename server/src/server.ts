@@ -3,13 +3,14 @@ import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
+import { join } from "path";
 // import auth from "./auth";
 
 console.debug("ENV", process.env.NODE_ENV);
 
 const environment = process.env.NODE_ENV || "development";
 const API_PORT = process.env.API_PORT || 3001;
-const base_route = process.env.BASE_ROUTE || "";
+const base_route = process.env.BASE_ROUTE || "/api";
 
 const app = express();
 
@@ -26,6 +27,11 @@ app.use(
   express.urlencoded({
     extended: true,
   })
+);
+
+app.use(
+  `${base_route}/images`,
+  express.static(join(__dirname, "..", "images"))
 );
 
 // const base_routes = require('./routes/base');
