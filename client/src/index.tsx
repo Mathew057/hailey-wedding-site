@@ -4,9 +4,12 @@ import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import "normalize.css";
 import "./style/base.css";
+import { CloudinaryContext } from "cloudinary-react";
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CloudinaryContext cloudName="dk9abuqyx">
+      <App />
+    </CloudinaryContext>
   </React.StrictMode>,
   document.getElementById("root")
 );

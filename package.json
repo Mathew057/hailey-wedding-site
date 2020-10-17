@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "concurrently \"npm run client-test\" \"npm run server-test\"",
-    "start": "concurrently \"npm run client-run\" \"npm run server-run\"",
+    "start": "concurrently \"npm run client-run\" \"npm run server-run\" \"twilio phone-numbers:update \"+12057828137\" --sms-url=\"http://localhost:3001/api/twilio/sms\"\"",
     "postinstall": "npm run server-install & npm run client-install",
     "build": "npm run client-build & npm run server-build",
-    "serve": "concurrently \"npm run client-serve\" \"npm run server-serve\"",
+    "serve": "concurrently \"npm run client-serve\" \"npm run server-serve\" \"twilio phone-numbers:update \"+12057828137\" --sms-url=\"http://localhost:3001/api/twilio/sms\"\"",
     "docs": "jsdoc -c jsdoc.conf.json",
     "docs-serve": "serve -l 5001 -d docs",
     "client-install": "cd client && npm install",

@@ -1,16 +1,20 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import SwipeableViews from "react-swipeable-views";
-import { autoPlay } from "react-swipeable-views-utils";
+import { autoPlay, virtualize } from "react-swipeable-views-utils";
 import pusher from "../utils/pusher";
 import Message from "./Message";
 import { Grid, Grow } from "@material-ui/core";
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+import { Image, Transformation } from "cloudinary-react";
+import useWindowDimensions from "../utils/hooks";
+import axios from "axios";
+const AutoPlaySwipeableViews = autoPlay(virtualize(SwipeableViews));
 
 const useStyles = makeStyles((theme) => ({
   root: {
     position: "relative",
-    height: "100%",
+    height: "100vh",
+    width: "100vw",
   },
   slider: {
     height: "100%",
@@ -42,9 +46,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function SlideRender({ index, key, height, width, images }: any) {
+  const style = {
+    height: "100vh",
+    width: "100vw",
+    color: "#fff",
+    overflow: "hidden",
+  };
+  const image_index =
+    index < 0 ? (index % images.length) + images.length : index % images.length;
+  return (
+    <div style={style} key={key}>
+      <Image
+        publicId={`${images[image_index].public_id}.jpg`}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <Transformation
+          height={height}
+          width={width}
+          crop="fill"
+          gravity="auto:faces"
+        />
+      </Image>
+    </div>
+  );
+}
+
 export default function ChatRoom(_props: any) {
   const classes = useStyles();
   const [index, setIndex] = React.useState(0);
+  const [images, setImages] = React.useState([]);
   const [messages, setMessages] = React.useState<Array<any>>([
     {
       ToCountry: "US",
@@ -57,7 +88,8 @@ export default function ChatRoom(_props: any) {
       FromState: "TX",
       SmsStatus: "received",
       FromCity: "GREENVILLE",
-      Body: "Test",
+      Body:
+        "Hi there!\nI'm a message board, feel free to send nice thoughts to (205)782-8137 and I will display them!",
       FromCountry: "US",
       To: "+12057828137",
       ToZip: "",
@@ -77,30 +109,28 @@ export default function ChatRoom(_props: any) {
     });
   }, []);
 
-  React.useEffect(() => {});
+  React.useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/images`)
+      .then((results) => {
+        setImages(results.data.resources);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  const { width, height } = useWindowDimensions();
+  if (images.length === 0) return <></>;
   return (
     <div className={classes.root}>
       <AutoPlaySwipeableViews
         index={index}
         onChangeIndex={(index) => setIndex(index)}
-        interval={5000}
+        interval={10000}
         className={classes.slider}
-      >
-        {Array(44)
-          .fill(0)
-          .map((_, index) => {
-            console.log(`${process.env.REACT_APP_API_URL}/images/${index}.jpg`);
-            return (
-              <div className={classes.slide} key={`${index}`}>
-                <img
-                  src={`${process.env.REACT_APP_API_URL}/images/${index}.jpg`}
-                  alt="test"
-                  style={{ maxWidth: "100%", maxHeight: "100%" }}
-                />
-              </div>
-            );
-          })}
-      </AutoPlaySwipeableViews>
+        slideRenderer={(props) =>
+          SlideRender({ ...props, width, height, images })
+        }
+      />
       <Grid
         container
         direction="column"

@@ -24,7 +24,14 @@ export default function Message(props: { message: any }) {
       <Typography variant="subtitle2">
         {phoneUtil.format(number, PhoneNumberFormat.NATIONAL)}
       </Typography>
-      <Typography variant="body2">{message.Body}</Typography>
+      <Typography variant="body2">
+        {message.Body.split("\n").map((line: string) => (
+          <>
+            {line}
+            <br />
+          </>
+        ))}
+      </Typography>
     </Paper>
   );
 }

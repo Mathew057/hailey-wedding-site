@@ -5,8 +5,15 @@ import helmet from "helmet";
 import compression from "compression";
 import { join } from "path";
 // import auth from "./auth";
+import cloudinary from "cloudinary"
 
 console.debug("ENV", process.env.NODE_ENV);
+
+cloudinary.v2.config({
+  cloud_name: 'dk9abuqyx', 
+  api_key: '441949622263376', 
+  api_secret: 'wT5cntxHscOQVIf5Mcs5tf-QtX0' 
+})
 
 const environment = process.env.NODE_ENV || "development";
 const API_PORT = process.env.API_PORT || 3001;
@@ -29,19 +36,19 @@ app.use(
   })
 );
 
-app.use(
-  `${base_route}/images`,
-  express.static(join(__dirname, "..", "images"))
-);
+// app.use(
+//   `${base_route}/images`,
+//   express.static(join(__dirname, "..", "images"))
+// );
 
 // const base_routes = require('./routes/base');
 app.get(base_route, async (req: Request, res: Response) => {
   res.send(`Hello from ${req.originalUrl}!`);
 });
 
-// DO NOT ADD DATA ROUTES WITHOUT THE AUTH THAT IS UNSAFE!!!!
-// app.use(`${base_route}/lead`, auth, require("./routes/leads"));
 app.use(`${base_route}/twilio`, require("./routes/twilio"));
+app.use(`${base_route}/images`, require("./routes/images"));
+
 // app.use(`/`, require("./routes/error"));
 
 // Closing gracefully on Ctrl+C
